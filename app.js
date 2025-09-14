@@ -1,178 +1,74 @@
-// ======= Tiny data (swap/expand later) =======
-const geo = [
-  { q: "What is the capital of Australia?", a: ["Canberra","Sydney","Melbourne","Perth"], c: 0 },
-  { q: "Which country borders BOTH Germany and Spain?", a: ["Switzerland","Italy","France","Belgium"], c: 2 },
-  { q: "Mount Kilimanjaro is in…", a: ["Kenya","Tanzania","Ethiopia","Uganda"], c: 1 },
-  { q: "The Danube flows into which sea?", a: ["Black Sea","Caspian Sea","Adriatic","Baltic"], c: 0 },
-  { q: "Which is not landlocked?", a: ["Bolivia","Paraguay","Mongolia","Peru"], c: 3 },
-  { q: "The city of Kraków is in…", a: ["Czechia","Poland","Austria","Hungary"], c: 1 },
-  { q: "The island of Hokkaidō belongs to…", a: ["China","Japan","South Korea","Philippines"], c: 1 },
-  { q: "Which desert is in southern Africa?", a: ["Atacama","Gobi","Kalahari","Great Sandy"], c: 2 },
-  { q: "Which country has more time zones?", a: ["USA","Russia"], c: 1 },
-  { q: "Cairo sits on which river?", a: ["Nile","Tigris","Euphrates","Jordan"], c: 0 },
-  { q: "Which is a Baltic state?", a: ["Slovakia","Latvia","Bulgaria","Albania"], c: 1 },
-  { q: "Capital of Canada?", a: ["Toronto","Vancouver","Ottawa","Montreal"], c: 2 },
-  { q: "Sri Lanka’s nearest neighbor is…", a: ["Thailand","India","Malaysia","Pakistan"], c: 1 },
-  { q: "Which ocean touches Dubai?", a: ["Atlantic","Indian","Pacific","Arctic"], c: 1 },
-  { q: "Andalusia is a region in…", a: ["Portugal","Spain","Italy","Greece"], c: 1 }
-];
-
-const lang = [
-  { q: 'Spanish: “Good morning” = ?', a: ["Buenas noches","Buenos días","Gracias","Por favor"], c: 1, tip:"Buenos días = morning" },
-  { q: 'French: “Thank you” = ?', a: ["S’il vous plaît","Merci","Bonjour","Pardon"], c: 1 },
-  { q: 'Arabic: “Peace be upon you” = ?', a: ["Shukran","Marhaba","As-salāmu ʿalaykum","Yalla"], c: 2 },
-  { q: 'Japanese: “Water” = ?', a: ["Mizu","Kaze","Yuki","Sora"], c: 0 },
-  { q: 'Italian: “Please” = ?', a: ["Prego","Grazie","Ciao","Per favore"], c: 3 },
-  { q: 'Hebrew: “Thank you” = ?', a: ["Todah","Bevakasha","Shalom","Laila tov"], c: 0 },
-  { q: 'German: “How are you?” = ?', a: ["Wie geht’s?","Guten Morgen","Auf Wiedersehen","Bitte"], c: 0 },
-  { q: 'Portuguese: “See you” = ?', a: ["Desculpa","Até logo","Boa noite","Com licença"], c: 1 },
-  { q: 'Mandarin: “Hello” (common) = ?', a: ["Zàijiàn","Xièxie","Nǐ hǎo","Bù kèqì"], c: 2 },
-  { q: 'Swahili: “Friend” = ?', a: ["Maji","Rafiki","Asante","Ndiyo"], c: 1 },
-  { q: 'Turkish: “Yes” = ?', a: ["Evet","Hayır","Merhaba","Lütfen"], c: 0 },
-  { q: 'Hindi: “No” = ?', a: ["Haan","Nahin","Shukriya","Namaste"], c: 1 },
-];
-
-const $ = (sel) => document.querySelector(sel);
-const todayISO = new Date().toISOString().slice(0,10);
-$("#today").textContent = todayISO;
-$("#year").textContent = new Date().getFullYear();
-
-const els = {
-  start: $("#startBtn"),
-  timer: $("#timer"),
-  game: $("#game"),
-  q: $("#question"),
-  opts: $("#options"),
-  fb: $("#feedback"),
-  streak: $("#streak"),
-  done: $("#completed"),
-  category: $("#category"),
-  share: $("#shareBtn"),
-};
-
-let ticking = false, timeLeft = 60, solvedToday = false, pickedIndex = null, correctIdx = null;
-
-// Load streak
-const LS_KEYS = { STREAK:"omd_streak", LAST:"omd_last", DONE:"omd_done" };
-const load = (k, d)=> JSON.parse(localStorage.getItem(k) ?? d);
-const save = (k, v)=> localStorage.setItem(k, JSON.stringify(v));
-
-function ensureDailyReset(){
-  const last = load(LS_KEYS.LAST, '""');
-  if (last !== todayISO){
-    // New day: mark not done
-    save(LS_KEYS.DONE, false);
-    save(LS_KEYS.LAST, todayISO);
-  }
+:root{
+  --bg:#0b0d10; --card:#12151a; --text:#e9eef5; --muted:#a8b2c1;
+  --accent:#6ee7ff; --accent2:#8b5cf6; --ok:#22c55e; --bad:#ef4444;
+  --shadow:0 10px 25px rgba(0,0,0,.35); --radius:16px;
 }
-ensureDailyReset();
-els.done.textContent = load(LS_KEYS.DONE,false) ? "Yes" : "No";
-els.streak.textContent = load(LS_KEYS.STREAK, 0);
-
-function seededIndex(len, seedStr){
-  // Deterministic “hash” from date+category for daily rotation
-  let h = 2166136261;
-  for (let i=0;i<seedStr.length;i++){
-    h ^= seedStr.charCodeAt(i);
-    h += (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24);
-  }
-  if (h<0) h = ~h + 1;
-  return h % len;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+  background: radial-gradient(80% 60% at 50% 0%, #12151a 0%, #0b0d10 60%, #080a0e 100%) fixed;
+  color:var(--text);
 }
-
-function pickQuestion(){
-  const cat = els.category.value;
-  const pool = cat === "geo" ? geo : lang;
-  pickedIndex = seededIndex(pool.length, `${todayISO}:${cat}`);
-  const item = pool[pickedIndex];
-  correctIdx = item.c;
-  return item;
+.wrap{max-width:980px;margin:32px auto;padding:0 16px}
+.site-header,.site-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1100px;margin:0 auto;padding:12px 16px;color:var(--muted)
 }
-
-function renderQuestion(item){
-  els.game.classList.remove("hidden");
-  els.fb.textContent = "";
-  els.q.textContent = item.q;
-  els.opts.innerHTML = "";
-  item.a.forEach((txt, i)=>{
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.textContent = txt;
-    btn.onclick = () => choose(i);
-    els.opts.appendChild(btn);
-  });
+.brand{display:flex;align-items:center;gap:10px}
+.logo{font-size:22px}
+.title{font-weight:800;color:var(--text)}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.ghost{
+  background:transparent;border:1px solid #233; color:var(--text);
+  padding:8px 12px;border-radius:999px;cursor:pointer
 }
-
-function choose(i){
-  if (!ticking) return;
-  const buttons = [...document.querySelectorAll(".option")];
-  buttons.forEach(b => b.disabled = true);
-  const correct = i === correctIdx;
-  buttons[i].classList.add(correct ? "correct" : "wrong");
-  buttons[correctIdx].classList.add("correct");
-  if (correct){
-    els.fb.textContent = "✅ Correct! You beat the clock.";
-    winDay();
-  } else {
-    els.fb.textContent = "❌ Not quite. You can still try again tomorrow!";
-    ticking = false; // one shot per day
-  }
+.ghost:hover{border-color:#345}
+.ghost.bad{border-color:#442}
+.card{
+  background:linear-gradient(180deg,#131720, #0f141b);
+  border:1px solid #1b2430;border-radius:var(--radius); padding:20px; box-shadow:var(--shadow)
 }
-
-function tick(){
-  if (!ticking) return;
-  timeLeft -= 1;
-  els.timer.textContent = timeLeft;
-  if (timeLeft <= 0){
-    ticking = false;
-    els.fb.textContent = "⏰ Time’s up!";
-    // disable buttons
-    [...document.querySelectorAll(".option")].forEach(b=>b.disabled = true);
-    return;
-  }
-  setTimeout(tick, 1000);
+.hero h1{margin:0 0 6px 0;font-size:26px}
+.muted{color:var(--muted);margin:0 0 16px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+@media (min-width:800px){.controls{grid-template-columns:auto auto 1fr auto auto}}
+.select{display:flex;flex-direction:column;gap:6px}
+select, input[type="email"]{
+  background:#0c1117;border:1px solid #1d2734;color:var(--text);
+  padding:10px 12px;border-radius:12px;width:100%
 }
-
-function start(){
-  if (load(LS_KEYS.DONE,false)){
-    els.fb.textContent = "You already completed today’s challenge. Come back tomorrow!";
-    els.game.classList.remove("hidden");
-    return;
-  }
-  const item = pickQuestion();
-  renderQuestion(item);
-  timeLeft = 60;
-  els.timer.textContent = timeLeft;
-  ticking = true;
-  setTimeout(tick, 1000);
+.primary{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#031018;border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer
 }
-
-function winDay(){
-  if (solvedToday || load(LS_KEYS.DONE,false)) return;
-  solvedToday = true;
-  save(LS_KEYS.DONE, true);
-  els.done.textContent = "Yes";
-  // streak logic
-  const last = load(LS_KEYS.LAST, todayISO);
-  const yesterday = new Date(todayISO); yesterday.setDate(yesterday.getDate()-1);
-  const yISO = yesterday.toISOString().slice(0,10);
-  let streak = load(LS_KEYS.STREAK, 0);
-  if (last === yISO){ streak += 1; } else { streak = 1; }
-  save(LS_KEYS.STREAK, streak);
-  save(LS_KEYS.LAST, todayISO);
-  els.streak.textContent = streak;
-  ticking = false;
+.primary:disabled{opacity:.5;cursor:not-allowed}
+.timer{
+  font-size:22px;font-weight:800;padding:6px 12px;border-radius:999px;border:1px solid #233;min-width:64px;text-align:center;justify-self:end
 }
-
-els.start.onclick = start;
-
-els.share.onclick = async () => {
-  const txt = `I just did my One-Minute Daily challenge (${todayISO})! Try it:`;
-  try{
-    if (navigator.share) { await navigator.share({ text: txt, url: location.href }); }
-    else{
-      await navigator.clipboard.writeText(`${txt} ${location.href}`);
-      alert("Share text copied to clipboard!");
-    }
-  }catch(e){ console.log(e); }
-};
+.submodes{display:flex;gap:8px;flex-wrap:wrap}
+.subbtn{
+  background:#0c1117;border:1px solid #1d2734;color:var(--text);
+  padding:8px 10px;border-radius:10px;cursor:pointer
+}
+.subbtn.active{border-color:var(--accent)}
+.hidden{display:none}
+.question{font-size:20px;margin-bottom:12px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.options{grid-template-columns:1fr}}
+.option{
+  background:#0c1117;border:1px solid #1d2734;color:var(--text);
+  padding:12px;border-radius:12px;cursor:pointer;text-align:left
+}
+.option:hover{border-color:#2a3647}
+.option.correct{border-color:var(--ok)}
+.option.wrong{border-color:var(--bad)}
+.feedback{margin-top:10px;min-height:24px}
+.progress{margin-top:8px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+.site-footer{justify-content:center;margin-top:24px;color:var(--muted)}
+/* modal */
+dialog{border:0;background:transparent}
+.modal{max-width:560px;margin:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}

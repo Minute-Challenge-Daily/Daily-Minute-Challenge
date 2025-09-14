@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>One-Minute Daily</title>
+  <meta name="description" content="A fresh 60-second challenge every day — quick geography and language mini-quizzes with streaks." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">⏱️</div>
+      <div class="title">One-Minute Daily</div>
+    </div>
+    <nav class="nav">
+      <button id="shareBtn" class="ghost">Share</button>
+      <a href="#about" class="ghost">About</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero card">
+      <h1>One challenge. 60 seconds. Every day.</h1>
+      <p class="muted">Pick a category and hit Start. Beat the clock to keep your streak alive.</p>
+
+      <div class="controls">
+        <label class="select">
+          <span>Category</span>
+          <select id="category">
+            <option value="geo">🌍 Geography</option>
+            <option value="lang">🗣️ Language</option>
+          </select>
+        </label>
+        <button id="startBtn" class="primary">Start 60s</button>
+        <div id="timer" class="timer" aria-live="polite">60</div>
+      </div>
+    </section>
+
+    <section id="game" class="card hidden" aria-live="polite">
+      <div id="question" class="question"></div>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card stats">
+      <div>🔥 Streak: <strong id="streak">0</strong></div>
+      <div>📅 Today: <span id="today"></span></div>
+      <div>✅ Completed: <strong id="completed">No</strong></div>
+    </section>
+
+    <section id="about" class="card">
+      <h2>About</h2>
+      <p>
+        One-Minute Daily gives you a tiny daily win: a fast challenge in under 60 seconds.
+        It’s snackable learning for busy people. Come back tomorrow for a new prompt.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>© <span id="year"></span> One-Minute Daily • Built with vanilla HTML/CSS/JS • No tracking cookies</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

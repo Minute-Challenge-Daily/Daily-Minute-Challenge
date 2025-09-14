@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 /**************************************************
  * One-Minute Daily – Advanced, Low-Repeat Engine *
  * - Procedural generators (virtually unlimited)  *
@@ -129,7 +130,7 @@ function renderResults(arr){
 refreshHeader();
 
 /* ========= Question Banks (Big) ========= */
-/* --- Geography: 120 capitals (country -> capital). --- */
+/* --- Geography: 120+ capitals (country -> capital). --- */
 const CAPITALS = [
   ["Australia","Canberra"],["New Zealand","Wellington"],["Fiji","Suva"],["Papua New Guinea","Port Moresby"],
   ["Japan","Tokyo"],["South Korea","Seoul"],["China","Beijing"],["Mongolia","Ulaanbaatar"],["India","New Delhi"],
@@ -150,7 +151,7 @@ const CAPITALS = [
   ["Benin","Porto-Novo"],["Togo","Lomé"],["Namibia","Windhoek"],["Botswana","Gaborone"],["Zimbabwe","Harare"],
   ["Zambia","Lusaka"],["Mozambique","Maputo"],["Angola","Luanda"],["Malawi","Lilongwe"],["Madagascar","Antananarivo"],
   ["Seychelles","Victoria"],["Mauritius","Port Louis"],["Comoros","Moroni"],["South Africa","Pretoria"],
-  ["Lesotho","Maseru"],["Eswatini","Mbabane"],["Ethiopia","Addis Ababa"],["Eritrea","Asmara"],
+  ["Lesotho","Maseru"],["Eswatini","Mbabane"],
   ["UK","London"],["Ireland","Dublin"],["France","Paris"],["Germany","Berlin"],["Italy","Rome"],
   ["Spain","Madrid"],["Portugal","Lisbon"],["Belgium","Brussels"],["Netherlands","Amsterdam"],["Luxembourg","Luxembourg"],
   ["Switzerland","Bern"],["Austria","Vienna"],["Czechia","Prague"],["Poland","Warsaw"],["Hungary","Budapest"],
@@ -158,15 +159,16 @@ const CAPITALS = [
   ["Montenegro","Podgorica"],["North Macedonia","Skopje"],["Albania","Tirana"],["Greece","Athens"],["Bulgaria","Sofia"],
   ["Romania","Bucharest"],["Ukraine","Kyiv"],["Belarus","Minsk"],["Lithuania","Vilnius"],["Latvia","Riga"],
   ["Estonia","Tallinn"],["Norway","Oslo"],["Sweden","Stockholm"],["Finland","Helsinki"],["Denmark","Copenhagen"],
-  ["Iceland","Reykjavík"],["Russia","Moscow"],["Canada","Ottawa"],["USA","Washington, D.C."],["Mexico","Mexico City"],
+  ["Iceland","Reykjavík"],["Russia","Moscow"],
+  ["Canada","Ottawa"],["USA","Washington, D.C."],["Mexico","Mexico City"],
   ["Guatemala","Guatemala City"],["Honduras","Tegucigalpa"],["El Salvador","San Salvador"],["Nicaragua","Managua"],
   ["Costa Rica","San José"],["Panama","Panama City"],["Cuba","Havana"],["Dominican Republic","Santo Domingo"],
-  ["Haiti","Port-au-Prince"],["Jamaica","Kingston"],["Colombia","Bogotá"],["Venezuela","Caracas"],["Ecuador","Quito"],
-  ["Peru","Lima"],["Bolivia","Sucre"],["Paraguay","Asunción"],["Uruguay","Montevideo"],["Chile","Santiago"],
-  ["Argentina","Buenos Aires"],["Brazil","Brasília"]
+  ["Haiti","Port-au-Prince"],["Jamaica","Kingston"],
+  ["Colombia","Bogotá"],["Venezuela","Caracas"],["Ecuador","Quito"],["Peru","Lima"],["Bolivia","Sucre"],
+  ["Paraguay","Asunción"],["Uruguay","Montevideo"],["Chile","Santiago"],["Argentina","Buenos Aires"],["Brazil","Brasília"]
 ];
 
-/* --- Language banks (150+ mixed). Format: [question, options[], correctIndex, lvl] --- */
+/* --- Language banks (large). Format: [question, options[], correctIndex, lvl] --- */
 const LANG_VOCAB = [
   ['French “Thank you”',['Merci','Bonjour','Pardon','S’il vous plaît'],0,'kid'],
   ['Spanish “Good morning”',['Buenas noches','Buenos días','Gracias','Por favor'],1,'kid'],
@@ -174,7 +176,6 @@ const LANG_VOCAB = [
   ['Japanese “Water”',['Mizu','Kaze','Yuki','Sora'],0,'teen'],
   ['Hebrew “Freedom”',['Herut','Ahava','Shalom','Emet'],0,'adult'],
   ['German “Because”',['aber','denn','weil','oder'],2,'adult'],
-  // extras
   ['Italian “Thank you”',['Grazie','Prego','Ciao','Per favore'],0,'kid'],
   ['Portuguese “Please”',['Por favor','Obrigado','Desculpa','Até logo'],0,'kid'],
   ['Mandarin “Thank you”',['Nǐ hǎo','Zàijiàn','Xièxie','Qǐng'],2,'teen'],
@@ -206,7 +207,6 @@ const LANG_VOCAB = [
   ['Urdu “No”',['Haan','Nahi','Shukriya','Ji'],1,'adult'],
   ['Afrikaans “Thank you”',['Dankie','Hallo','Totsiens','Asseblief'],0,'teen'],
   ['Zulu “Hello”',['Sawubona','Ngiyabonga','Hamba kahle','Yebo'],0,'teen'],
-  // … (there are ~150 entries total; trimmed here for brevity in this response)
 ];
 
 const LANG_PHRASES = [
@@ -216,10 +216,9 @@ const LANG_PHRASES = [
   ['Turkish “Yes”',['Evet','Hayır','Merhaba','Lütfen'],0,'teen'],
   ['Hindi “No”',['Haan','Nahin','Shukriya','Namaste'],1,'adult'],
   ['French “I would like”',['Je veux','J’aimerais','Je suis','J’aurai'],1,'adult'],
-  // add many more… (dozens included in full file)
 ];
 
-/* --- Science & History (80+ each; shortened here for space) --- */
+/* --- Science & History --- */
 const SCI_BASICS = [
   ["H2O is…",["Oxygen","Hydrogen","Water","Salt"],2,"kid"],
   ["Earth is the ___ planet from the Sun",["2nd","3rd","4th","5th"],1,"kid"],
@@ -227,7 +226,6 @@ const SCI_BASICS = [
   ["Nearest star to Earth",["Sirius","Betelgeuse","Sun","Proxima Centauri"],2,"teen"],
   ["DNA stands for…",["Deoxyribonucleic acid","Dinucleotide acid","Dioxyribose nucleic","None"],0,"adult"],
   ["Main long-lived warming gas",["O₂","CO₂","N₂","Ar"],1,"adult"],
-  // + dozens more…
 ];
 const SCI_PHYS = [
   ["Speed = distance ÷ ___",["mass","time","force","work"],1,"kid"],
@@ -236,7 +234,6 @@ const SCI_PHYS = [
   ["Light speed ≈ ___ km/s",["3,000","30,000","300,000","3,000,000"],2,"teen"],
   ["Work = ___ × distance",["Power","Force","Energy","Momentum"],1,"adult"],
   ["SI unit of power",["Joule","Watt","Newton","Volt"],1,"adult"],
-  // + dozens more…
 ];
 
 const HIST_WORLD = [
@@ -246,7 +243,6 @@ const HIST_WORLD = [
   ["Roman Empire capital",["Athens","Rome","Carthage","Milan"],1,"teen"],
   ["Magna Carta (century)",["11th","12th","13th","14th"],2,"adult"],
   ["Ottoman Empire ended after",["WWI","WWII","Crimean War","Peloponnesian"],0,"adult"],
-  // + many more…
 ];
 const HIST_LEADERS = [
   ["First US President",["Adams","Washington","Jefferson","Lincoln"],1,"kid"],
@@ -255,15 +251,10 @@ const HIST_LEADERS = [
   ["Gandhi led movement in",["Pakistan","India","Bangladesh","Sri Lanka"],1,"teen"],
   ["Atatürk transformed which country?",["Syria","Turkey","Greece","Iran"],1,"adult"],
   ["Founding PM of Israel",["Ben-Gurion","Begin","Peres","Rabin"],0,"adult"],
-  // + many more…
 ];
 
-/* ========= Procedural Generators =========
- * Deterministic per date + combo + cursor so multiple
- * attempts in the same day are always fresh.
- */
+/* ========= Procedural Generators ========= */
 function genArithmetic(age, n, seedStr){
-  // Ranges by age
   const cfg = {
     kid:  {a:[1,20], b:[1,20], ops:['+','-','×']},
     teen: {a:[5,50], b:[5,50], ops:['+','-','×','÷']},
@@ -277,31 +268,27 @@ function genArithmetic(age, n, seedStr){
     let B = Math.floor(cfg.b[0] + prng()*(cfg.b[1]-cfg.b[0]+1));
     let q, ans;
     if(op==='÷'){
-      // make divisible nicely
-      ans = Math.floor(1 + prng()*12);
+      let ansInt = Math.floor(1 + prng()*12);
       B = Math.floor(1 + prng()*12);
-      A = ans * B;
+      A = ansInt * B;
+      ans = ansInt;
       q = `${A} ÷ ${B} = ?`;
     }else if(op==='×'){
-      // smallish for speed
       A = Math.floor(2+prng()*20);
       B = Math.floor(2+prng()*20);
       ans = A*B; q = `${A} × ${B} = ?`;
     }else if(op==='+'){
       ans = A+B; q = `${A} + ${B} = ?`;
     }else{
-      // ensure positive
       if(B>A) [A,B]=[B,A];
       ans = A-B; q = `${A} − ${B} = ?`;
     }
-    // choices: one correct + 3 distractors
     const choices = new Set([ans]);
     while(choices.size<4){
       let delta = Math.floor((prng()*10)+1)* (prng()<0.5? -1:1);
       choices.add(ans+delta);
     }
     const arr = Array.from(choices);
-    // shuffle deterministically
     for(let j=arr.length-1;j>0;j--){
       const k = Math.floor(prng()*(j+1)); [arr[j],arr[k]]=[arr[k],arr[j]];
     }
@@ -315,7 +302,6 @@ function genAlgebra(age, n, seedStr){
   const prng = mulberry32(seedFromString(seedStr));
   const qs = [];
   for(let i=0;i<n;i++){
-    // linear equations ax + b = c
     let a = Math.floor(2+prng()*9);
     let x = Math.floor((age==='kid'?1:age==='teen'?2:3)+prng()*12);
     let b = Math.floor(prng()*15);
@@ -340,7 +326,6 @@ function genGeometry(age, n, seedStr){
   for(let i=0;i<n;i++){
     const t = prng();
     if(t<0.34){
-      // Perimeter rectangle LxW
       let L = Math.floor(2+prng()*30), W = Math.floor(2+prng()*30);
       const ans = 2*(L+W);
       const q = `Perimeter of ${L}×${W} rectangle = ?`;
@@ -349,14 +334,12 @@ function genGeometry(age, n, seedStr){
       const a = Array.from(choices); for(let j=a.length-1;j>0;j--){const k=Math.floor(prng()*(j+1));[a[j],a[k]]=[a[k],a[j]];}
       qs.push({q,a:a.map(String),c:a.indexOf(ans),lvl:age});
     }else if(t<0.67){
-      // Area rectangle
       let L = Math.floor(2+prng()*20), W = Math.floor(2+prng()*20);
       const ans = L*W, q = `Area of ${L}×${W} rectangle = ?`;
       const set=new Set([ans]); while(set.size<4){ set.add(ans+Math.floor(prng()*15+2)*(prng()<0.5?-1:1)); }
       const a=Array.from(set); for(let j=a.length-1;j>0;j--){const k=Math.floor(prng()*(j+1));[a[j],a[k]]=[a[k],a[j]];}
       qs.push({q,a:a.map(String),c:a.indexOf(ans),lvl:age});
     }else{
-      // Interior angles polygon: (n-2)*180
       let nSides = Math.floor(3 + prng()*8); // 3..10
       const ans = (nSides-2)*180, q = `Sum of interior angles of a ${nSides}-gon = ?°`;
       const set = new Set([ans]); while(set.size<4){ set.add(ans + 180*(prng()<0.5?-1:1)); }
@@ -375,7 +358,6 @@ function buildCapitalsQuestions(n, seedStr){
   for(let i=idxs.length-1;i>0;i--){ const k=Math.floor(prng()*(i+1)); [idxs[i],idxs[k]]=[idxs[k],idxs[i]]; }
   for(let t=0;t<n;t++){
     const [country, cap] = CAPITALS[idxs[t % CAPITALS.length]];
-    // pick 3 other capitals as distractors
     const opts = new Set([cap]);
     while(opts.size<4){
       const r = CAPITALS[Math.floor(prng()*CAPITALS.length)][1];
@@ -388,7 +370,6 @@ function buildCapitalsQuestions(n, seedStr){
   return qs;
 }
 function fromBank(bank, age, n, seedStr){
-  // Filter by age, then deterministic shuffle
   const pool = bank.filter(q=>q[3]===age);
   const prng = mulberry32(seedFromString(seedStr));
   const idxs = [...Array(pool.length).keys()];
@@ -411,7 +392,6 @@ const BANK_STATIC = {
            ["Rising sun rays",["Japan (naval)","South Korea","Taiwan","China"],0,"teen"],
            ["Blue with Southern Cross + Union Jack",["Australia","NZ","Fiji","UK"],2,"adult"],
            ["Tricolor with dark green at hoist (Ireland vs Ivory Coast)",["Ireland","Côte d’Ivoire","Italy","India"],0,"adult"],
-           // + add more if you like
          ], age, n, seed)
   },
   lang: { Vocab: (age,n,seed)=>fromBank(LANG_VOCAB,age,n,seed),
@@ -426,7 +406,6 @@ const BANK_STATIC = {
 function dailyMixBuilder(cat){
   if(cat==="mix"){
     return (age,n,seed)=>{
-      // pull from all categories’ Daily Mix: capitals + vocab + basics + world + arithmetic
       const chunk = Math.max(2, Math.floor(n/5));
       const arr = [];
       arr.push(...buildCapitalsQuestions(chunk, seed+"cap"));
@@ -437,7 +416,6 @@ function dailyMixBuilder(cat){
       return arr.slice(0,n);
     };
   }
-  // category-specific daily mixes
   return {
     math: (age,n,seed)=>[
       ...genArithmetic(age, Math.ceil(n/2), seed+"a"),
@@ -488,10 +466,9 @@ let ticking=false, timeLeft=60, qList=[], qIndex=0, correctCount=0, maxQ=10;
 
 function buildQuiz(cat, sub, age, n){
   const combo = `${cat}:${sub}:${age}`;
-  const seed = nextGenSeedAndAdvance(combo, n); // advance so next attempt is fresh the same day
+  const seed = nextGenSeedAndAdvance(combo, n);
   const maker = GENERATORS[cat]?.[sub] || GENERATORS[cat]?.["Daily Mix"] || GENERATORS["mix"]["Daily Mix"];
   let qs = maker(age, n, seed);
-  // Safety: if any submode pool is tiny, pad with arithmetic generator
   if(qs.length < n){
     qs = qs.concat(genArithmetic(age, n-qs.length, seed+"pad"));
   }
@@ -553,7 +530,7 @@ function finish(){
 els.start.onclick = ()=>{
   correctCount=0; qIndex=0; els.fb.textContent="";
   timeLeft=60; els.timer.textContent=timeLeft; maxQ=10;
-  const want = (els.limit.value==="ten") ? maxQ : 50; // big buffer; timer will cap
+  const want = (els.limit.value==="ten") ? maxQ : 50; // timer will cap
   qList = buildQuiz(els.category.value, currentSub, els.age.value, want);
   els.game.classList.remove("hidden");
   renderQuestion(qList[qIndex]);
@@ -597,3 +574,4 @@ els.sendFeedback.onclick = ()=>{
   window.location.href = `mailto:amit.jac35@gmail.com?subject=${subject}&body=${body}`;
   els.fbStatus.textContent = "Opening your email app…";
 };
+}); // DOMContentLoaded

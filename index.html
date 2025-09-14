@@ -15,6 +15,7 @@
     </div>
     <nav class="nav">
       <button id="signupOpen" class="ghost">Sign up</button>
+      <button id="feedbackOpen" class="ghost">Feedback</button>
       <a href="#about" class="ghost">About</a>
     </nav>
   </header>
@@ -22,7 +23,7 @@
   <main class="wrap">
     <section class="hero card">
       <h1>One challenge a day keeps the brainrot away</h1>
-      <p class="muted">Pick a category, choose a mode, set your age level, and beat the clock. Keep your streak alive 🔥</p>
+      <p class="muted">Pick a category, choose a mode, set your age level, then finish up to 10 questions or beat the 60-second clock. Do as many quizzes as you like — we’ll track today’s scores and your streak.</p>
 
       <div class="controls">
         <label class="select">
@@ -46,11 +47,17 @@
           </select>
         </label>
 
-        <div class="submodes" id="submodes">
-          <!-- filled dynamically (e.g., Daily Mix, Algebra, Arithmetic, …) -->
-        </div>
+        <div class="submodes" id="submodes"></div>
 
-        <button id="startBtn" class="primary">Start 60s</button>
+        <label class="select">
+          <span>Limit</span>
+          <select id="limit">
+            <option value="time">⏱️ 60 seconds</option>
+            <option value="ten">🔟 10 questions</option>
+          </select>
+        </label>
+
+        <button id="startBtn" class="primary">Start</button>
         <div id="timer" class="timer" aria-live="polite">60</div>
       </div>
     </section>
@@ -65,15 +72,20 @@
     <section class="card stats">
       <div>🔥 Streak: <strong id="streak">0</strong></div>
       <div>📅 Today: <span id="today"></span></div>
-      <div>✅ Completed: <strong id="completed">No</strong></div>
-      <div>🏁 Score: <strong id="score">0/0</strong></div>
+      <div>🏁 Last score: <strong id="lastScore">–</strong></div>
+      <div>🧪 Attempts today: <strong id="attempts">0</strong></div>
+    </section>
+
+    <section id="todayResults" class="card">
+      <h2>Today’s Results</h2>
+      <div id="resultsList" class="results"></div>
     </section>
 
     <section id="about" class="card">
       <h2>About</h2>
       <p>
-        Tiny daily wins build big brains. Choose your level, jump into a one-minute quiz, and come back tomorrow for a new seed.
-        No logins required. Email sign-up is optional for updates.
+        Snack-size learning for busy brains. Choose your level, pick a category/sub-mode, and take quick quizzes that rotate new questions daily.
+        Results are saved locally on your device; your streak increases once per day after your first completed quiz.
       </p>
     </section>
   </main>
@@ -85,21 +97,38 @@
   <!-- Email signup modal -->
   <dialog id="signupModal">
     <form method="dialog" class="card modal">
-      <h3>Get a weekly pack of new quizzes</h3>
-      <p class="muted">We’ll store your email in your browser only. You can export/delete anytime.</p>
+      <h3>Get weekly quiz packs</h3>
+      <p class="muted">We store your email in your browser only. Export/delete anytime.</p>
       <div class="row">
         <input id="emailInput" type="email" placeholder="you@example.com" required />
         <button id="saveEmail" class="primary" type="button">Save</button>
       </div>
       <div class="row">
-        <button id="exportEmails" type="button" class="ghost">Export saved emails (CSV)</button>
+        <button id="exportEmails" type="button" class="ghost">Export (CSV)</button>
         <button id="deleteEmails" type="button" class="ghost bad">Delete my email</button>
-      </div>
-      <div class="row">
         <button value="close">Close</button>
       </div>
       <p id="emailStatus" class="feedback"></p>
-      <small class="muted">Want real email collection later? Swap to Formspree/Airtable endpoint in <code>app.js</code>.</small>
+      <small class="muted">Later, you can connect Formspree/Airtable to collect emails server-side.</small>
+    </form>
+  </dialog>
+
+  <!-- Feedback modal -->
+  <dialog id="feedbackModal">
+    <form method="dialog" class="card modal" id="feedbackForm">
+      <h3>Quick Feedback</h3>
+      <p class="muted">Tell us what to improve. This opens your email app and sends to <strong>amit.jac35@gmail.com</strong>.</p>
+      <div class="row">
+        <input type="text" id="fbName" placeholder="Your name (optional)" />
+      </div>
+      <div class="row">
+        <textarea id="fbText" rows="5" placeholder="Your feedback"></textarea>
+      </div>
+      <div class="row">
+        <button id="sendFeedback" type="button" class="primary">Send</button>
+        <button value="close">Close</button>
+      </div>
+      <p id="fbStatus" class="feedback"></p>
     </form>
   </dialog>
 

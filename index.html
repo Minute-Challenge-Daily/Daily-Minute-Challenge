@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>One-Minute Daily</title>
-  <meta name="description" content="A fresh 60-second challenge every day — quick geography and language mini-quizzes with streaks." />
+  <meta name="description" content="One challenge a day keeps the brainrot away. Daily 60s quizzes by category, age & difficulty." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -14,24 +14,42 @@
       <div class="title">One-Minute Daily</div>
     </div>
     <nav class="nav">
-      <button id="shareBtn" class="ghost">Share</button>
+      <button id="signupOpen" class="ghost">Sign up</button>
       <a href="#about" class="ghost">About</a>
     </nav>
   </header>
 
   <main class="wrap">
     <section class="hero card">
-      <h1>One challenge. 60 seconds. Every day.</h1>
-      <p class="muted">Pick a category and hit Start. Beat the clock to keep your streak alive.</p>
+      <h1>One challenge a day keeps the brainrot away</h1>
+      <p class="muted">Pick a category, choose a mode, set your age level, and beat the clock. Keep your streak alive 🔥</p>
 
       <div class="controls">
         <label class="select">
-          <span>Category</span>
-          <select id="category">
-            <option value="geo">🌍 Geography</option>
-            <option value="lang">🗣️ Language</option>
+          <span>Age</span>
+          <select id="age">
+            <option value="kid">Kid (8–12)</option>
+            <option value="teen">Teen (13–17)</option>
+            <option value="adult" selected>Adult (18+)</option>
           </select>
         </label>
+
+        <label class="select">
+          <span>Category</span>
+          <select id="category">
+            <option value="mix">🎲 Random Mix</option>
+            <option value="math">➗ Math</option>
+            <option value="geo">🌍 Geography</option>
+            <option value="lang">🗣️ Language</option>
+            <option value="sci">🔬 Science</option>
+            <option value="hist">🏛️ History</option>
+          </select>
+        </label>
+
+        <div class="submodes" id="submodes">
+          <!-- filled dynamically (e.g., Daily Mix, Algebra, Arithmetic, …) -->
+        </div>
+
         <button id="startBtn" class="primary">Start 60s</button>
         <div id="timer" class="timer" aria-live="polite">60</div>
       </div>
@@ -41,26 +59,49 @@
       <div id="question" class="question"></div>
       <div id="options" class="options"></div>
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      <div class="progress" id="progress"></div>
     </section>
 
     <section class="card stats">
       <div>🔥 Streak: <strong id="streak">0</strong></div>
       <div>📅 Today: <span id="today"></span></div>
       <div>✅ Completed: <strong id="completed">No</strong></div>
+      <div>🏁 Score: <strong id="score">0/0</strong></div>
     </section>
 
     <section id="about" class="card">
       <h2>About</h2>
       <p>
-        One-Minute Daily gives you a tiny daily win: a fast challenge in under 60 seconds.
-        It’s snackable learning for busy people. Come back tomorrow for a new prompt.
+        Tiny daily wins build big brains. Choose your level, jump into a one-minute quiz, and come back tomorrow for a new seed.
+        No logins required. Email sign-up is optional for updates.
       </p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <small>© <span id="year"></span> One-Minute Daily • Built with vanilla HTML/CSS/JS • No tracking cookies</small>
+    <small>© <span id="year"></span> One-Minute Daily • Vanilla HTML/CSS/JS • No trackers</small>
   </footer>
+
+  <!-- Email signup modal -->
+  <dialog id="signupModal">
+    <form method="dialog" class="card modal">
+      <h3>Get a weekly pack of new quizzes</h3>
+      <p class="muted">We’ll store your email in your browser only. You can export/delete anytime.</p>
+      <div class="row">
+        <input id="emailInput" type="email" placeholder="you@example.com" required />
+        <button id="saveEmail" class="primary" type="button">Save</button>
+      </div>
+      <div class="row">
+        <button id="exportEmails" type="button" class="ghost">Export saved emails (CSV)</button>
+        <button id="deleteEmails" type="button" class="ghost bad">Delete my email</button>
+      </div>
+      <div class="row">
+        <button value="close">Close</button>
+      </div>
+      <p id="emailStatus" class="feedback"></p>
+      <small class="muted">Want real email collection later? Swap to Formspree/Airtable endpoint in <code>app.js</code>.</small>
+    </form>
+  </dialog>
 
   <script src="app.js"></script>
 </body>

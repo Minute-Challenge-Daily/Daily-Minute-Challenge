@@ -31,10 +31,14 @@ body{
 }
 .hero h1{margin:0 0 6px 0;font-size:26px}
 .muted{color:var(--muted);margin:0 0 16px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
-@media (min-width:800px){.controls{grid-template-columns:auto auto 1fr auto auto}}
+.controls{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start
+}
+@media (min-width:900px){
+  .controls{grid-template-columns:auto auto 1fr auto auto}
+}
 .select{display:flex;flex-direction:column;gap:6px}
-select, input[type="email"]{
+select, input[type="email"], textarea{
   background:#0c1117;border:1px solid #1d2734;color:var(--text);
   padding:10px 12px;border-radius:12px;width:100%
 }
@@ -67,6 +71,11 @@ select, input[type="email"]{
 .progress{margin-top:8px;color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 @media (max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+.results{display:grid;gap:8px}
+.result-item{
+  display:flex;justify-content:space-between;gap:8px;
+  background:#0c1117;border:1px solid #1d2734;border-radius:12px;padding:10px
+}
 .site-footer{justify-content:center;margin-top:24px;color:var(--muted)}
 /* modal */
 dialog{border:0;background:transparent}

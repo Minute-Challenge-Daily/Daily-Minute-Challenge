@@ -23,7 +23,7 @@
   <main class="wrap">
     <section class="hero card">
       <h1>One challenge a day keeps the brainrot away</h1>
-      <p class="muted">Pick a category, choose a mode, set your age level, then finish up to 10 questions or beat the 60-second clock. Do as many quizzes as you like — we’ll track today’s scores and your streak.</p>
+      <p class="muted">Pick a category, choose a mode, set your age level, then finish up to 10 questions or beat the 60-second clock. Do as many quizzes as you like — we track today’s scores and your streak.</p>
 
       <div class="controls">
         <label class="select">
@@ -66,7 +66,7 @@
       <div id="question" class="question"></div>
       <div id="options" class="options"></div>
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
-      <div class="progress" id="progress"></div>
+      <div id="progress" class="progress"></div>
     </section>
 
     <section class="card stats">
@@ -94,6 +94,22 @@
     <small>© <span id="year"></span> One-Minute Daily • Vanilla HTML/CSS/JS • No trackers</small>
   </footer>
 
+  <!-- First-visit/Login gate -->
+  <dialog id="gateModal">
+    <form method="dialog" class="card modal">
+      <h3>Welcome back 👋</h3>
+      <p class="muted">Sign up or log in with your email, or play for free without an account.</p>
+      <div class="row">
+        <input id="gateEmail" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="row">
+        <button id="gateSignup" type="button" class="primary">Sign up / Log in</button>
+        <button id="gatePlayFree" type="button" class="ghost">Play for free</button>
+      </div>
+      <small class="muted">We store this email in your browser only. You can remove it anytime.</small>
+    </form>
+  </dialog>
+
   <!-- Email signup modal -->
   <dialog id="signupModal">
     <form method="dialog" class="card modal">
@@ -109,7 +125,6 @@
         <button value="close">Close</button>
       </div>
       <p id="emailStatus" class="feedback"></p>
-      <small class="muted">Later, you can connect Formspree/Airtable to collect emails server-side.</small>
     </form>
   </dialog>
 
@@ -117,7 +132,7 @@
   <dialog id="feedbackModal">
     <form method="dialog" class="card modal" id="feedbackForm">
       <h3>Quick Feedback</h3>
-      <p class="muted">Tell us what to improve. This opens your email app and sends to <strong>amit.jac35@gmail.com</strong>.</p>
+      <p class="muted">Tell us what to improve. This opens your email app to <strong>amit.jac35@gmail.com</strong>.</p>
       <div class="row">
         <input type="text" id="fbName" placeholder="Your name (optional)" />
       </div>
@@ -132,6 +147,6 @@
     </form>
   </dialog>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=5" defer></script>
 </body>
 </html>

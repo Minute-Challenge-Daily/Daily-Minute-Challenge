@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8">
+<h1>OMD AI API Test</h1>
+<button id="go">Send POST</button>
+<pre id="out">Click “Send POST”</pre>
+<script>
+const ENDPOINT = "https://omd-ai-api.vercel.app/api/generate"; // <-- your Vercel URL
+document.getElementById('go').onclick = async () => {
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        seed: 'demo',
+        age: 'teen',
+        category: 'geo',
+        submode: 'Capitals',
+        count: 3
+      })
+    });
+    const txt = await r.text();
+    try { document.getElementById('out').textContent = JSON.stringify(JSON.parse(txt), null, 2); }
+    catch { document.getElementById('out').textContent = txt; }
+  } catch (e) {
+    document.getElementById('out').textContent = 'Request failed: ' + e.message;
+  }
+};
+</script>
